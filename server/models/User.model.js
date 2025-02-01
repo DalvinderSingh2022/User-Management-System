@@ -16,8 +16,8 @@ const userSchema = new mongoose.Schema({
     mobileNumber: String,
     bio: String,
     availability: {
-        start: { type: Date, required: true },
-        end: { type: Date, required: true },
+        start: { type: String, default: "00:00" },
+        end: { type: String, default: "24:59" },
     },
     isAdmin: {
         type: Boolean,
