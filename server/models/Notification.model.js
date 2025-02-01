@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 
 const STATUS_TYPES = {
     QUEUED: "queued",
