@@ -10,6 +10,11 @@ exports.register = async (req, res) => {
     }
 
     try {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new User({
             name,
@@ -21,7 +26,8 @@ exports.register = async (req, res) => {
         await user.save();
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
-        res.status(400).json({ message: 'Registration failed', error: error.message });
+        console.error(error);
+        res.status(500).json({ message: 'Registration failed', error: error.message });
     }
 };
 
@@ -41,8 +47,9 @@ exports.login = async (req, res) => {
 
         const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.json({ token, userId: user._id, isAdmin: user.isAdmin });
+        res.json({ message: 'Login successful', data: { token, userId: user._id, isAdmin: user.isAdmin } });
     } catch (error) {
-        res.status(400).json({ message: 'Login failed', error: error.message });
+        console.error(error);
+        res.status(500).json({ message: 'Login failed', error: error.message });
     }
 };

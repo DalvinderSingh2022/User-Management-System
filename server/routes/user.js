@@ -1,11 +1,9 @@
 const express = require("express");
-const { getProfile, updateProfile, sendNotification, getNotifications } = require("../controllers/userController");
+const { getUser, updateUser, getAllUsers } = require("../controllers/userController");
 const auth = require("../middleware/auth");
 const router = express.Router();
 
-router.get("/profile", auth, getProfile);
-router.put("/profile", auth, updateProfile);
-router.post("/send-notification", auth, sendNotification);
-router.get("/notifications", auth, getNotifications);
+router.route("/profile").get(auth, getUser).put(auth, updateUser);
+router.get("/", getAllUsers);
 
 module.exports = router;
