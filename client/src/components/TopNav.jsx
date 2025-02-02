@@ -17,16 +17,13 @@ const TopNav = () => {
     <nav className="bg-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <Link
-            to="/"
-            className="flex-shrink-0 font-bold text-xl text-blue-600"
-          >
+          <div className="flex-shrink-0 font-bold text-xl text-blue-600">
             SiteName
-          </Link>
+          </div>
 
           <div className="hidden md:flex items-center space-x-4">
             <Link
-              to={user?.isAdmin ? "/admin-dashboard" : "/user-dashboard"}
+              to="/"
               className="flex items-center text-gray-600 hover:text-blue-600"
             >
               Dashboard
@@ -64,7 +61,7 @@ const TopNav = () => {
         {menuOpen && (
           <div className="md:hidden py-4 space-y-4">
             <Link
-              to={user?.isAdmin ? "/admin-dashboard" : "/user-dashboard"}
+              to="/"
               className="w-full flex items-center text-gray-600 hover:text-blue-600 p-2"
             >
               Dashboard

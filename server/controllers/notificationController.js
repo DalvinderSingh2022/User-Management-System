@@ -1,8 +1,10 @@
 const User = require("../models/User.model");
-const { Notification, STATUS_TYPES } = require("../models/Notification.model");
+const { Recipient, STATUS_TYPES } = require("../models/Recipient.model");
+const Notification = require("../models/Notification.model");
 const mongoose = require("mongoose");
 
-const isAvailable = (user) => {
+const isAvailable = async (userId) => {
+    const user = await User.findById(userId);
     const currentTime = new Date();
     const currentTimeInMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
 
@@ -42,43 +44,41 @@ exports.sendNotification = async (req, res) => {
             return res.status(400).json({ message: `Invalid recipient Ids: ${invalidRecipients.join(', ')}` });
         }
 
-        const notification = new Notification({
-            sender: req.user.userId,
-            message
-        });
-
         if (isCritical) {
-            var sender = await User.findById(req.user.userId);
+            const sender = await User.findById(req.user.userId);
 
             if (!sender.isAdmin) {
                 return res.status(403).json({ message: "Only admins can send critical notifications" });
             }
         }
 
-        const validUsers = await User.find({ _id: { $in: recipients } });
+        const notification = new Notification({
+            sender: req.user.userId,
+            message
+        });
+        await notification.save();
 
-        const validRecipients = validUsers.map(user => {
-            const recipient = { user: user._id };
+        const recipientDocuments = recipients.map(async (user) => {
+            const recipient = new Recipient({ user, notification: notification._id });
 
-            if ((isCritical && sender.isAdmin) || isAvailable(user)) {
+            if (isCritical || await isAvailable(user)) {
                 recipient.status = STATUS_TYPES.DELIVERED;
                 recipient.deliveredAt = Date.now();
             } else {
                 recipient.status = STATUS_TYPES.QUEUED;
             }
-            return recipient;
-        })
-        notification.recipients = validRecipients;
+            return recipient.save();
+        });
+        await Promise.all(recipientDocuments);
 
-        await notification.save();
         res.status(201).json({ message: "Notification sent successfully", data: notification });
     } catch (error) {
-        console.error(err.message);
+        console.error(error.message);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
 
-exports.getNotifications = async (req, res) => {
+exports.getSendNotifications = async (req, res) => {
     const { userId } = req.user;
 
     if (!userId) {
@@ -90,11 +90,36 @@ exports.getNotifications = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        const notifications = await Notification.find({ recipients: { user: userId } })
+        let notifications = await Notification.find({ sender: userId })
             .populate("sender", "name")
             .sort("-sentAt");
 
         res.status(200).json({ message: "Notifications fetched successfully", data: notifications });
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching notifications", error: error.message });
+    }
+};
+
+exports.getRecipientNotifications = async (req, res) => {
+    const { userId } = req.user;
+
+    if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+    }
+
+    try {
+        if (!await User.exists({ _id: userId })) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const notifications = await Recipient.find({ user: userId });
+
+        const notificationsIds = notifications.map(recipient => recipient.notification);
+        const notificationDetails = await Promise.all(
+            notificationsIds.map(async (id) => await Notification.findById(id).populate("sender", "name"))
+        );
+
+        res.status(200).json({ message: "Notifications fetched successfully", data: notificationDetails });
     } catch (error) {
         res.status(500).json({ message: "Error fetching notifications", error: error.message });
     }

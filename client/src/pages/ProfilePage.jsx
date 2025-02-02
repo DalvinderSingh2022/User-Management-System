@@ -72,7 +72,7 @@ const ProfilePage = () => {
                 onChange={handleChange}
                 className={
                   isEditing
-                    ? "outline-none border rounded px-2 py-1 w-64 text-xl"
+                    ? "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     : "text-3xl font-bold text-gray-800 flex items-center"
                 }
                 placeholder="Enter mobile number"
@@ -119,7 +119,7 @@ const ProfilePage = () => {
                 onChange={handleChange}
                 className={
                   isEditing
-                    ? "outline-none border rounded px-2 py-1 w-64"
+                    ? "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     : "text-gray-700"
                 }
                 placeholder="Enter mobile number"
@@ -141,7 +141,7 @@ const ProfilePage = () => {
                   }
                   className={
                     isEditing
-                      ? "outline-none border rounded px-2 py-1 mr-2"
+                      ? "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       : "text-gray-700"
                   }
                 />
@@ -155,7 +155,7 @@ const ProfilePage = () => {
                   }
                   className={
                     isEditing
-                      ? "outline-none border rounded px-2 py-1 mr-2"
+                      ? "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       : "text-gray-700"
                   }
                 />
@@ -175,9 +175,10 @@ const ProfilePage = () => {
                 onChange={handleChange}
                 className={
                   isEditing
-                    ? "outline-none w-full border rounded px-2 py-1 h-32 resize-none"
+                    ? "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     : "text-gray-700 resize-none"
                 }
+                rows="4"
                 placeholder="Write your bio..."
               />
             </div>
@@ -187,15 +188,5 @@ const ProfilePage = () => {
     </div>
   );
 };
-
-// Example usage:
-// <ProfilePage user={{
-//   name: "John Doe",
-//   email: "john@example.com",
-//   mobileNumber: "+1234567890",
-//   bio: "Software developer passionate about building great user experiences",
-//   availability: [{ start: "09:00", end: "17:00" }],
-//   isAdmin: true
-// }} />
 
 export default ProfilePage;

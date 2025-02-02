@@ -1,5 +1,11 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
-import { updateUserProfile } from "../utils/api";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { updateUserProfile, getUsers } from "../utils/api";
 import { useAuth } from "./AuthContext.jsx";
 
 const UserContext = createContext();
@@ -7,6 +13,7 @@ const UserContext = createContext();
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { user, setUser } = useAuth();
@@ -23,8 +30,28 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      fetchUsers();
+    }
+  }, [user]);
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await getUsers();
+      setUsers(res.data.data);
+    } catch (error) {
+      setError(error.response?.data?.message || "Users fetching failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <UserContext.Provider value={{ user, error, loading, updateProfile }}>
+    <UserContext.Provider
+      value={{ user, users, error, loading, updateProfile }}
+    >
       {children}
     </UserContext.Provider>
   );

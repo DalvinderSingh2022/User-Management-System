@@ -18,7 +18,7 @@ const AuthForm = ({ isLogin }) => {
 
     if (isLogin) {
       await login(email, password);
-      navigate("/user-dashboard");
+      navigate("/");
     } else {
       await register(name, email, password);
       navigate("/login");

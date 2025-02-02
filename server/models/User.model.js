@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     bio: String,
     availability: {
         start: { type: String, default: "00:00" },
-        end: { type: String, default: "24:59" },
+        end: { type: String, default: "23:59" },
     },
     isAdmin: {
         type: Boolean,
@@ -25,4 +25,4 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model("User", userSchema);
