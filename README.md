@@ -182,8 +182,8 @@ Response:
 Response:
 ```json
 {
-   message: "Notifications fetched successfully",
-   data:[{
+   "message": "Notifications fetched successfully",
+   "data":[{
        "message": "Meeting Reminder",
        "sender": {
             "_id": "65c3a8b1f1a2d4e5f6g7h8i",
@@ -201,8 +201,8 @@ Response:
 Response:
 ```json
 {
-   message: "Notifications fetched successfully",
-   data:[{
+   "message": "Notifications fetched successfully",
+   "data":[{
           "message": "Status Update",
           "status": "queued",
           "sender": {
