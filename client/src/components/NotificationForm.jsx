@@ -3,11 +3,11 @@ import { FaPaperPlane, FaUsers, FaExclamationTriangle } from "react-icons/fa";
 import { useUser } from "../context/UserContext";
 import { useNotification } from "../context/NotificationContext";
 
-const NotificationForm = ({ close }) => {
+const NotificationForm = ({ close, initialRecipients = [] }) => {
   const { user, users } = useUser();
   const { createNotification } = useNotification();
   const [message, setMessage] = useState("");
-  const [recipients, setRecipients] = useState([]);
+  const [recipients, setRecipients] = useState(initialRecipients);
   const [isCritical, setIsCritical] = useState(false);
 
   const handleRecipientToggle = (userId) => {
@@ -82,7 +82,7 @@ const NotificationForm = ({ close }) => {
           </label>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {users
-              //   .filter((u) => u._id !== user._id)
+              .filter((u) => u._id !== user._id)
               .map((user) => (
                 <label
                   key={user._id}
@@ -112,13 +112,13 @@ const NotificationForm = ({ close }) => {
           <button
             type="button"
             onClick={close}
-            className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+            className="cursor-pointer px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="w-full flex justify-center items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="cursor-pointer w-full flex justify-center items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <FaPaperPlane className="mr-2" />
             Send Notification

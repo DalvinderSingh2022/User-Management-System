@@ -57,8 +57,29 @@ exports.updateUser = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find().select("-password");
+
         res.status(200).json({ message: "Users fetched successfully", data: users });
     } catch (error) {
         res.status(400).json({ message: "Error fetching users", error: error.message });
+    }
+};
+
+exports.getProfile = async (req, res) => {
+    const userId = req.params.id;
+
+    if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: "Invalid User ID" });
+    }
+
+    try {
+        const user = await User.findById(userId).select("-password");
+
+        res.status(200).json({ message: "User profile fetched successfully", data: user });
+    } catch (error) {
+        res.status(400).json({ message: "Error fetching user profile", error: error.message });
     }
 };

@@ -8,15 +8,30 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { useUser } from "../context/UserContext";
+import { useParams } from "react-router-dom";
 
 const ProfilePage = () => {
-  const { user, updateProfile, loading } = useUser();
+  const { userId } = useParams();
+  const { user, updateProfile, loading, getProfile } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(null);
 
   useEffect(() => {
-    setFormData(user);
-  }, [user]);
+    const fetchProfile = async () => {
+      if (userId === user._id) {
+        setFormData(user);
+      } else {
+        const profile = await getProfile(userId);
+        setFormData(profile);
+      }
+    };
+
+    if (!formData) {
+      fetchProfile();
+    }
+
+    return () => setFormData(null);
+  }, [user, userId, getProfile]);
 
   const handleEditToggle = () => {
     setIsEditing((prev) => !prev);
@@ -78,21 +93,23 @@ const ProfilePage = () => {
                 placeholder="Enter mobile number"
               />
             </div>
-            <button
-              onClick={isEditing ? handleSubmit : handleEditToggle}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              {isEditing ? (
-                <FaSave className="mr-2" />
-              ) : (
-                <FaEdit className="mr-2" />
-              )}
-              {isEditing
-                ? loading
-                  ? "Saving..."
-                  : "Save Changes"
-                : "Edit Profile"}
-            </button>
+            {user._id === userId && (
+              <button
+                onClick={isEditing ? handleSubmit : handleEditToggle}
+                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                {isEditing ? (
+                  <FaSave className="mr-2" />
+                ) : (
+                  <FaEdit className="mr-2" />
+                )}
+                {isEditing
+                  ? loading
+                    ? "Saving..."
+                    : "Save Changes"
+                  : "Edit Profile"}
+              </button>
+            )}
           </div>
 
           <div className="space-y-4">
@@ -101,7 +118,7 @@ const ProfilePage = () => {
                 <FaEnvelope className="mr-2" />
                 Email
               </h3>
-              <span className="text-gray-700">{user.email}</span>
+              <span className="text-gray-700">{formData.email}</span>
             </div>
 
             <div>

@@ -25,6 +25,7 @@ export const authRegister = (name, email, password) => api.post("/auth/register"
 export const getUserProfile = () => api.get("/user/profile");
 export const updateUserProfile = (profileData) => api.put("/user/profile", profileData);
 export const getUsers = () => api.get("/user");
+export const getUser = (userId) => api.get(`user/${userId}`);
 
 //Notification enpoints
 export const getSendNotifications = () => api.get("/notification/send");

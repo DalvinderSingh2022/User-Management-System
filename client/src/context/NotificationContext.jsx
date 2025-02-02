@@ -1,4 +1,10 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+} from "react";
 import {
   getSendNotifications,
   sendNotification,
@@ -22,7 +28,7 @@ export const NotificationProvider = ({ children }) => {
     }
   }, [user]);
 
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     setLoading(true);
     try {
       const [sendRes, recipientRes] = await Promise.all([
@@ -38,19 +44,22 @@ export const NotificationProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const createNotification = async ({ recipients, message, isCritical }) => {
-    setLoading(true);
-    try {
-      await sendNotification({ recipients, message, isCritical });
-      await fetchNotifications();
-    } catch (error) {
-      setError(error.response?.data?.message || "Notification creation failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const createNotification = useCallback(
+    async ({ recipients, message, isCritical }) => {
+      setLoading(true);
+      try {
+        await sendNotification({ recipients, message, isCritical });
+        await fetchNotifications();
+      } catch (error) {
+        setError(error.response?.data?.message || "Request creation failed");
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
   return (
     <NotificationContext.Provider

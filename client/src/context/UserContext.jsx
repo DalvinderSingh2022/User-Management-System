@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { updateUserProfile, getUsers } from "../utils/api";
+import { updateUserProfile, getUsers, getUser } from "../utils/api";
 import { useAuth } from "./AuthContext.jsx";
 
 const UserContext = createContext();
@@ -23,6 +23,18 @@ export const UserProvider = ({ children }) => {
     try {
       const res = await updateUserProfile(profileData);
       setUser(res.data.data);
+    } catch (error) {
+      setError(error.response?.data?.message || "Profile updation failed");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const getProfile = useCallback(async (userId) => {
+    setLoading(true);
+    try {
+      const res = await getUser(userId);
+      return res.data.data;
     } catch (error) {
       setError(error.response?.data?.message || "Profile updation failed");
     } finally {
@@ -50,7 +62,7 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, users, error, loading, updateProfile }}
+      value={{ user, users, error, loading, updateProfile, getProfile }}
     >
       {children}
     </UserContext.Provider>
