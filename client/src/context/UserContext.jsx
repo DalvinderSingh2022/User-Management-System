@@ -13,13 +13,15 @@ const UserContext = createContext();
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { user, setUser } = useAuth();
 
   const updateProfile = useCallback(async (profileData) => {
+    setError("");
     setLoading(true);
+
     try {
       const res = await updateUserProfile(profileData);
       setUser(res.data.data);
@@ -31,7 +33,9 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   const getProfile = useCallback(async (userId) => {
+    setError("");
     setLoading(true);
+
     try {
       const res = await getUser(userId);
       return res.data.data;
@@ -43,13 +47,13 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (user) {
-      fetchUsers();
-    }
+    if (user) fetchUsers();
   }, [user]);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
+    setError("");
     setLoading(true);
+
     try {
       const res = await getUsers();
       setUsers(res.data.data);
@@ -58,7 +62,7 @@ export const UserProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   return (
     <UserContext.Provider

@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { FaPaperPlane, FaUsers, FaExclamationTriangle } from "react-icons/fa";
 import { useUser } from "../context/UserContext";
 import { useNotification } from "../context/NotificationContext";
+import LoadingSpinner from "./LaodingSpinner";
 
 const NotificationForm = ({ close, initialRecipients = [] }) => {
   const { user, users } = useUser();
-  const { createNotification } = useNotification();
+  const { createNotification, loading } = useNotification();
   const [message, setMessage] = useState("");
   const [recipients, setRecipients] = useState(initialRecipients);
   const [isCritical, setIsCritical] = useState(false);
@@ -81,31 +82,37 @@ const NotificationForm = ({ close, initialRecipients = [] }) => {
             Select Recipients
           </label>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {users
-              .filter((u) => u._id !== user._id)
-              .map((user) => (
-                <label
-                  key={user._id}
-                  className={`flex items-center p-3 border rounded-lg cursor-pointer ${
-                    recipients.includes(user._id)
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-blue-300"
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={recipients.includes(user._id)}
-                    onChange={() => handleRecipientToggle(user._id)}
-                    className="form-checkbox h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
-                  />
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-gray-900">
-                      {user.name}
-                    </p>
-                    <p className="text-xs text-gray-500">{user.email}</p>
-                  </div>
-                </label>
-              ))}
+            {users?.lenght > 0 ? (
+              users
+                .filter((u) => u._id !== user._id)
+                .map((user) => (
+                  <label
+                    key={user._id}
+                    className={`flex items-center p-3 border rounded-lg cursor-pointer ${
+                      recipients.includes(user._id)
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-200 hover:border-blue-300"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={recipients.includes(user._id)}
+                      onChange={() => handleRecipientToggle(user._id)}
+                      className="form-checkbox h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
+                    />
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-gray-900">
+                        {user.name}
+                      </p>
+                      <p className="text-xs text-gray-500">{user.email}</p>
+                    </div>
+                  </label>
+                ))
+            ) : users?.length !== 1 ? (
+              <LoadingSpinner />
+            ) : (
+              "No User Yet (Other than you)"
+            )}
           </div>
         </div>
         <div className="flex justify-end space-x-4">
@@ -121,7 +128,7 @@ const NotificationForm = ({ close, initialRecipients = [] }) => {
             className="cursor-pointer w-full flex justify-center items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <FaPaperPlane className="mr-2" />
-            Send Notification
+            {loading ? "sending" : "Send Notification"}
           </button>
         </div>
       </form>

@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     setLoading(true);
+
     const token = localStorage.getItem("token");
 
     if (token) {
@@ -36,7 +37,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const fetchUserData = async () => {
+    setError("");
     setLoading(true);
+
     try {
       const res = await getUserProfile();
       setUser(res.data.data);
@@ -48,7 +51,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = useCallback(async (email, password) => {
+    setError("");
     setLoading(true);
+
     try {
       const res = await authLogin(email, password);
       localStorage.setItem("token", res.data.data.token);
@@ -65,11 +70,12 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(() => {
     localStorage.removeItem("token");
     setUser(null);
-    setLoading(false);
   }, []);
 
   const register = useCallback(async (name, email, password) => {
+    setError("");
     setLoading(true);
+
     try {
       await authRegister(name, email, password);
     } catch (error) {

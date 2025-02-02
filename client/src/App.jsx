@@ -1,13 +1,13 @@
-import React, { Suspense } from "react";
+import React, { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-import ProfilePage from "./pages/ProfilePage.jsx";
-import Layout from "./components/Layout.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
-import NotificationsPage from "./pages/NotificationPage.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
+
+const Login = lazy(() => import("./pages/Login.jsx"));
+const Register = lazy(() => import("./pages/Register.jsx"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage.jsx"));
+const Layout = lazy(() => import("./components/Layout.jsx"));
+const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
+const NotificationsPage = lazy(() => import("./pages/NotificationPage.jsx"));
 
 const App = () => {
   const { user } = useAuth();

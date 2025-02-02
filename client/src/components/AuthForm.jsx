@@ -1,4 +1,3 @@
-// AuthForm.jsx
 import React, { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -32,9 +31,7 @@ const AuthForm = ({ isLogin }) => {
     }));
   };
 
-  if (user) {
-    return <Navigate to="/" replace />;
-  }
+  if (user) return <Navigate to="/" replace />;
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -120,21 +117,14 @@ const AuthForm = ({ isLogin }) => {
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-600">
-            {isLogin ? (
-              <Link
-                to="/register"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Don't have an account? Sign up
-              </Link>
-            ) : (
-              <Link
-                to="/login"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Already have an account? Sign in
-              </Link>
-            )}
+            <Link
+              to={isLogin ? "/register" : "/login"}
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              {isLogin
+                ? "Don't have an account? Sign up"
+                : "Already have an account? Sign in"}
+            </Link>
           </div>
         </div>
       </div>

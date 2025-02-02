@@ -2,17 +2,14 @@ import React, { useState } from "react";
 import { FaPlus, FaInbox, FaPaperPlane } from "react-icons/fa";
 import NotificationForm from "../components/NotificationForm.jsx";
 import { useNotification } from "../context/NotificationContext";
+import LoadingSpinner from "../components/LaodingSpinner.jsx";
 
 const NotificationsPage = () => {
+  const { notifications, user } = useNotification();
   const [activeTab, setActiveTab] = useState("send");
   const [show, setShow] = useState(false);
-  const { notifications, user } = useNotification();
 
-  if (!notifications || !user) {
-    return <div>loading</div>;
-  }
-
-  console.log(notifications);
+  if (!notifications || !user) return <LoadingSpinner />;
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -61,40 +58,41 @@ const NotificationsPage = () => {
             Recipient ({notifications.recipient.length})
           </button>
         </div>
+
         <div className="bg-white rounded-lg shadow">
-          {notifications[activeTab].map((notification) => (
-            <div
-              key={notification._id}
-              className="p-4 border-b last:border-b-0 hover:bg-gray-50"
-            >
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="font-medium">{notification.message}</p>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {activeTab === "send" ? (
-                      <>
-                        To:{" "}
-                        {notification.recipients
-                          .map((recipient) => recipient.name)
-                          .join(",")}
-                        <span className="mx-2">•</span>
-                      </>
-                    ) : (
-                      <>
-                        From: {notification.sender.name}
-                        <span className="mx-2">•</span>
-                      </>
-                    )}
-                    {`${new Date(notification.sentAt).toDateString()}
+          {notifications[activeTab]?.length > 0 ? (
+            notifications[activeTab].map((notification) => (
+              <div
+                key={notification._id}
+                className="p-4 border-b last:border-b-0 hover:bg-gray-50"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-medium">{notification.message}</p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {activeTab === "send" ? (
+                        <>
+                          To:
+                          {notification.recipients.map((r) => r.name).join(",")}
+                          <span className="mx-2">|</span>
+                        </>
+                      ) : (
+                        <>
+                          From: {notification.sender.name}
+                          <span className="mx-2">|</span>
+                        </>
+                      )}
+                      {`${new Date(notification.sentAt).toDateString()}
                       at 
                       ${new Date(notification.sentAt).toLocaleTimeString()}`}
-                  </p>
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-
-          {!notifications[activeTab].length && (
+            ))
+          ) : notifications[activeTab]?.length !== 0 ? (
+            "loading..."
+          ) : (
             <div className="p-8 text-center text-gray-500">
               No {activeTab} notifications found
             </div>

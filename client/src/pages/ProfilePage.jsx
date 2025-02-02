@@ -11,23 +11,21 @@ import { useUser } from "../context/UserContext";
 import { useParams } from "react-router-dom";
 
 const ProfilePage = () => {
-  const { userId } = useParams();
   const { user, updateProfile, loading, getProfile } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(null);
+  const { userId } = useParams();
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      if (userId === user._id) {
-        setFormData(user);
-      } else {
-        const profile = await getProfile(userId);
-        setFormData(profile);
-      }
-    };
-
     if (!formData) {
-      fetchProfile();
+      (async () => {
+        if (userId === user._id) {
+          setFormData(user);
+        } else {
+          const profile = await getProfile(userId);
+          setFormData(profile);
+        }
+      })();
     }
 
     return () => setFormData(null);

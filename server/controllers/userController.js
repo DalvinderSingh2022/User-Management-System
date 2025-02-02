@@ -11,7 +11,7 @@ exports.getUser = async (req, res) => {
 
         res.status(200).json({ message: "Profile fetched successfully", data: user });
     } catch (error) {
-        res.status(400).json({ message: "Error fetching profile", error: error.message });
+        res.status(500).json({ message: "Error fetching profile", error: error.message });
     }
 };
 
@@ -60,7 +60,7 @@ exports.getAllUsers = async (req, res) => {
 
         res.status(200).json({ message: "Users fetched successfully", data: users });
     } catch (error) {
-        res.status(400).json({ message: "Error fetching users", error: error.message });
+        res.status(500).json({ message: "Error fetching users", error: error.message });
     }
 };
 
@@ -80,6 +80,6 @@ exports.getProfile = async (req, res) => {
 
         res.status(200).json({ message: "User profile fetched successfully", data: user });
     } catch (error) {
-        res.status(400).json({ message: "Error fetching user profile", error: error.message });
+        res.status(500).json({ message: "Error fetching user profile", error: error.message });
     }
 };

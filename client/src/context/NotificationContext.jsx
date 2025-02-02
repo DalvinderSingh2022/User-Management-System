@@ -23,18 +23,19 @@ export const NotificationProvider = ({ children }) => {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) {
-      fetchNotifications();
-    }
+    if (user) fetchNotifications();
   }, [user]);
 
   const fetchNotifications = useCallback(async () => {
+    setError("");
     setLoading(true);
+
     try {
       const [sendRes, recipientRes] = await Promise.all([
         getSendNotifications(),
         getRecipientNotifications(),
       ]);
+
       setNotifications({
         send: sendRes.data.data,
         recipient: recipientRes.data.data,
@@ -46,20 +47,19 @@ export const NotificationProvider = ({ children }) => {
     }
   }, []);
 
-  const createNotification = useCallback(
-    async ({ recipients, message, isCritical }) => {
-      setLoading(true);
-      try {
-        await sendNotification({ recipients, message, isCritical });
-        await fetchNotifications();
-      } catch (error) {
-        setError(error.response?.data?.message || "Request creation failed");
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
+  const createNotification = useCallback(async (notificationData) => {
+    setError("");
+    setLoading(true);
+
+    try {
+      await sendNotification(notificationData);
+      await fetchNotifications();
+    } catch (error) {
+      setError(error.response?.data?.message || "Request creation failed");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   return (
     <NotificationContext.Provider
