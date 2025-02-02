@@ -112,13 +112,15 @@ Response:
 *Get all users*  
 Response:
 ```json
-[
-  {
-    "_id": "65c3a8b1f1a2d4e5f6g7h8i",
-    "name": "John Doe",
-    "role": "user"
-    // Add other fields as necessary
-  }
+{
+   message: "Users fetched successfully",
+   data: [{
+       "_id": "65c3a8b1f1a2d4e5f6g7h8i",
+       "name": "John Doe",
+       "isAdmin": false
+       ...
+  },
+  ...
 ]
 ```
 
@@ -127,10 +129,13 @@ Response:
 Request Body:
 ```json
 {
-  "name": "John Doe",
-  "availability": { "start": "09:00", "end": "17:00" },
-  "bio": "bio",
-  "mobileNumber": 1234567890
+   message: "Profile updated successfully",
+   data: {
+     "name": "John Doe",
+     "availability": { "start": "09:00", "end": "17:00" },
+     "bio": "bio",
+     "mobileNumber": 1234567890
+   }
 }
 ```
 Response:
@@ -141,7 +146,7 @@ Response:
     "_id": "65c3a8b1f1a2d4e5f6g7h8i",
     "name": "John Doe",
     "email": "john@example.com"
-    // Add other fields as necessary
+    ...
   }
 }
 ```
@@ -166,8 +171,8 @@ Response:
     "_id": "6sqc3a8b1f1a2d4e5f6g7h8i",
     "status": "delivered",
     "sentAt": "2024-02-20T12:00:00Z",
-    "sender": "65c3a8b1f1a2d4e5f6g7h8i"
-    // Add other fields as necessary
+    "sender": "65c3a8b1f1a2d4e5f6g7h8i",
+    ...
   }
 }
 ```
@@ -176,16 +181,18 @@ Response:
 *Get recipient notifications*  
 Response:
 ```json
-[
-  {
-    "message": "Meeting Reminder",
-    "sender": {
-      "_id": "65c3a8b1f1a2d4e5f6g7h8i",
-      "name": "admin"
-    },
-    "status": "delivered"
-    // Add other fields as necessary
-  }
+{
+   message: "Notifications fetched successfully",
+   data:[{
+       "message": "Meeting Reminder",
+       "sender": {
+            "_id": "65c3a8b1f1a2d4e5f6g7h8i",
+            "name": "admin"
+       },
+       "status": "delivered",
+       ...
+     },
+   ...
 ]
 ```
 
@@ -193,16 +200,18 @@ Response:
 *Get sent notifications*  
 Response:
 ```json
-[
-  {
-    "message": "Status Update",
-    "status": "queued",
-    "sender": {
-      "_id": "65c3a8b1f1a2d4e5f6g7h8i",
-      "name": "admin"
-    }
-    // Add other fields as necessary
-  }
+{
+   message: "Notifications fetched successfully",
+   data:[{
+          "message": "Status Update",
+          "status": "queued",
+          "sender": {
+               "_id": "65c3a8b1f1a2d4e5f6g7h8i",
+               "name": "admin"
+          }
+          ...
+   },
+   ...
 ]
 ```
 
@@ -246,4 +255,3 @@ PORT=5000
    ```ini
    VITE_API_URL=https://your-backend-url.com
    ```
-```
