@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api"
+const API_URL = "http://localhost:5000/api";
 
 const api = axios.create({
     baseURL: API_URL,
@@ -8,6 +8,7 @@ const api = axios.create({
         "Content-Type": "application/json",
     },
 })
+
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem("token")
     if (token) {
@@ -17,10 +18,9 @@ api.interceptors.request.use((config) => {
 });
 
 // Auth endpoints
-export const login = (email, password) => api.post("/auth/login", { email, password })
-export const register = (name, email, password) => api.post("/auth/register", { name, email, password })
+export const authLogin = (email, password) => api.post("/auth/login", { email, password });
+export const authRegister = (name, email, password) => api.post("/auth/register", { name, email, password });
 
 // User endpoints
-export const getUserProfile = () => api.get("/user/profile")
-
-export default api;
+export const getUserProfile = () => api.get("/user/profile");
+export const updateUserProfile = (profileData) => api.put("/user/profile", profileData);

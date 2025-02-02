@@ -1,10 +1,10 @@
 // AuthForm.jsx
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const AuthForm = ({ isLogin }) => {
-  const { login, register, loading } = useAuth();
+  const { login, register, loading, user } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -31,6 +31,10 @@ const AuthForm = ({ isLogin }) => {
       [e.target.name]: e.target.value,
     }));
   };
+
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

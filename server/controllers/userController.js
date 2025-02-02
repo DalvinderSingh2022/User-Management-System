@@ -38,7 +38,7 @@ exports.updateUser = async (req, res) => {
     const updateData = {};
     if (name) updateData.name = name;
     if (mobileNumber) updateData.mobileNumber = mobileNumber;
-    if (bio) updateData.bio = bio;
+    if (bio || bio === '') updateData.bio = bio;
     if (availability) updateData.availability = availability;
 
     try {

@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import * as jwtDecode from "jwt-decode";
-import * as api from "../utils/api.js";
+import { getUserProfile, authRegister, authLogin } from "../utils/api.js";
 
 const AuthContext = createContext();
 
@@ -36,26 +36,24 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserData = async () => {
     try {
-      const res = await api.getUserProfile();
+      const res = await getUserProfile();
       setUser(res.data.data);
     } catch (error) {
-      setError("Error fetching user data");
+      setError(error.response?.data?.message || "User data fetching failed");
     } finally {
       setLoading(false);
     }
   };
 
   const login = useCallback(async (email, password) => {
-    setError("");
     try {
-      const res = await api.login(email, password);
+      const res = await authLogin(email, password);
       localStorage.setItem("token", res.data.data.token);
       await fetchUserData();
+
       return res.data.data.isAdmin;
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Login failed";
-      setError(errorMessage);
-      throw new Error(errorMessage);
+      setError(error.response?.data?.message || "Login failed");
     }
   }, []);
 
@@ -67,17 +65,15 @@ export const AuthProvider = ({ children }) => {
 
   const register = useCallback(async (name, email, password) => {
     try {
-      await api.register(name, email, password);
+      await authRegister(name, email, password);
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Registration failed";
-      throw new Error(errorMessage);
+      setError(error.response?.data?.message || "Registration failed");
     }
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, error, login, logout, register }}
+      value={{ user, loading, error, login, logout, register, setUser }}
     >
       {children}
     </AuthContext.Provider>
