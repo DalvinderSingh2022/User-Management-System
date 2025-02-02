@@ -12,6 +12,8 @@ const NotificationsPage = () => {
     return <div>loading</div>;
   }
 
+  console.log(notifications);
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-5xl mx-auto">
@@ -69,9 +71,17 @@ const NotificationsPage = () => {
                 <div>
                   <p className="font-medium">{notification.message}</p>
                   <p className="text-sm text-gray-500 mt-1">
-                    {user._id !== notification.sender._id && (
+                    {activeTab === "send" ? (
                       <>
-                        {notification.sender.name}
+                        To:{" "}
+                        {notification.recipients
+                          .map((recipient) => recipient.name)
+                          .join(",")}
+                        <span className="mx-2">•</span>
+                      </>
+                    ) : (
+                      <>
+                        From: {notification.sender.name}
                         <span className="mx-2">•</span>
                       </>
                     )}
