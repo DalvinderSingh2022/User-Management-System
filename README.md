@@ -113,8 +113,8 @@ Response:
 Response:
 ```json
 {
-   message: "Users fetched successfully",
-   data: [{
+   "message": "Users fetched successfully",
+   "data": [{
        "_id": "65c3a8b1f1a2d4e5f6g7h8i",
        "name": "John Doe",
        "isAdmin": false
@@ -129,8 +129,8 @@ Response:
 Request Body:
 ```json
 {
-   message: "Profile updated successfully",
-   data: {
+   "message": "Profile updated successfully",
+   "data": {
      "name": "John Doe",
      "availability": { "start": "09:00", "end": "17:00" },
      "bio": "bio",
