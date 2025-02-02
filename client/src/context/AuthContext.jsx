@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import * as jwtDecode from "jwt-decode";
-import { getUserProfile, authRegister, authLogin } from "../utils/api.js";
+import { getUser, authRegister, authLogin } from "../utils/api.js";
 
 const AuthContext = createContext();
 
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
       const decoded = jwtDecode.jwtDecode(token);
 
       if (decoded.exp > Date.now() / 1000) {
-        fetchUserData();
+        fetchUserData(decoded.userId);
       } else {
         localStorage.removeItem("token");
         setLoading(false);
@@ -36,12 +36,12 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const fetchUserData = async () => {
+  const fetchUserData = async (userId) => {
     setError("");
     setLoading(true);
 
     try {
-      const res = await getUserProfile();
+      const res = await getUser(userId);
       setUser(res.data.data);
     } catch (error) {
       setError(error.response?.data?.message || "User data fetching failed");

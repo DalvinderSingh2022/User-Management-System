@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api",
+    baseURL: apiUrl || "http://localhost:5000/api",
     headers: {
         "Content-Type": "application/json",
     },
@@ -20,7 +22,6 @@ export const authLogin = (email, password) => api.post("/auth/login", { email, p
 export const authRegister = (name, email, password) => api.post("/auth/register", { name, email, password });
 
 // User endpoints
-export const getUserProfile = () => api.get("/user/profile");
 export const updateUserProfile = (profileData) => api.put("/user/profile", profileData);
 export const getUsers = () => api.get("/user");
 export const getUser = (userId) => api.get(`user/${userId}`);
