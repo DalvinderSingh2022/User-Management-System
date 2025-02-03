@@ -6,7 +6,7 @@ import LoadingSpinner from "./LaodingSpinner";
 
 const NotificationForm = ({ close, initialRecipients = [] }) => {
   const { user, users } = useUser();
-  const { createNotification, loading } = useNotification();
+  const { createNotification, loading, error } = useNotification();
   const [message, setMessage] = useState("");
   const [recipients, setRecipients] = useState(initialRecipients);
   const [isCritical, setIsCritical] = useState(false);
@@ -22,8 +22,7 @@ const NotificationForm = ({ close, initialRecipients = [] }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await createNotification({ message, recipients, isCritical });
-
-    close();
+    if (!error) close();
   };
 
   if (!Array.isArray(users) || !user) return <LoadingSpinner />;

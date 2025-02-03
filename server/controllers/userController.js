@@ -37,7 +37,7 @@ exports.updateUser = async (req, res) => {
         return res.status(400).json({ message: "Invalid User ID" });
     }
 
-    if (!name && !mobileNumber && !bio && !availability) {
+    if (!name && !mobileNumber && (!bio || bio === '') && !availability) {
         return res.status(400).json({ message: "At least one field is required" });
     }
 
