@@ -99,17 +99,17 @@ axios.get("/api/", {
 });
 ```
 
-````
 ### Authentication
 
 **POST /api/auth/register**
+
 ```json
 {
   "name": "John Doe",
   "email": "john@example.com",
   "password": "SecurePass123!"
 }
-````
+```
 
 Response:
 
