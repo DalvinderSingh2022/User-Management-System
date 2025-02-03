@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LaodingSpinner";
 
 const ProfilePage = () => {
-  const { user, updateProfile, loading, getProfile } = useUser();
+  const { user, updateProfile, loading, error, getProfile } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(null);
   const { userId } = useParams();
@@ -91,7 +91,7 @@ const ProfilePage = () => {
                   className={
                     isEditing
                       ? "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      : "text-3xl font-bold text-gray-800 flex items-center"
+                      : "text-2xl font-bold text-gray-800 flex items-center"
                   }
                   placeholder="Enter mobile number"
                 />

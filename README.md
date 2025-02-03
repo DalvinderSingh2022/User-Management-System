@@ -4,24 +4,28 @@ A comprehensive user management system with authentication, profile management, 
 
 ## Features
 
-**User  Functionality**
+**User Functionality**
+
 - Secure JWT authentication
 - Profile management (name, mobile, bio, availability)
 - Notification system with availability-based delivery
 - View sent/received notifications
 
 **Admin Functionality**
+
 - Send critical/non-critical notifications
 
 ## Technologies
 
 **Backend**
+
 - Node.js, Express.js
 - MongoDB, Mongoose
 - JWT, bcrypt
 - Node Cron
 
 **Frontend**
+
 - React.js
 - Tailwind CSS
 - React Router
@@ -30,12 +34,14 @@ A comprehensive user management system with authentication, profile management, 
 ## Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/DalvinderSingh2022/user-management-system.git
    cd user-management-system
    ```
 
 2. Backend setup:
+
    ```bash
    cd server
    npm install
@@ -52,6 +58,48 @@ A comprehensive user management system with authentication, profile management, 
 
 ## API Documentation
 
+### Header Requirement
+
+All endpoints except authentication routes require the `x-auth-token` header:
+
+```http
+x-auth-token: <JWT_TOKEN>
+```
+
+### Token Handling
+
+After successful login, store the response in localStorage:
+
+```javascript
+// Login response
+{
+  "message": "Login successful",
+  "data": {
+    "token": "eyJhbGci...",
+    "userId": "65c3a8b1f1a2d4e5f6g7h8i",
+    "isAdmin": false
+  }
+}
+
+// Store in localStorage
+localStorage.setItem('toekn', JSON.stringify(response.data.token));
+```
+
+### Making Authenticated Requests
+
+```javascript
+// Get token from localStorage
+const token = JSON.parse(localStorage.getItem("token"));
+
+// Set headers for API calls
+axios.get("/api/", {
+  headers: {
+    "x-auth-token": token,
+  },
+});
+```
+
+````
 ### Authentication
 
 **POST /api/auth/register**
@@ -61,8 +109,10 @@ A comprehensive user management system with authentication, profile management, 
   "email": "john@example.com",
   "password": "SecurePass123!"
 }
-```
+````
+
 Response:
+
 ```json
 {
   "message": "User  registered successfully"
@@ -70,13 +120,16 @@ Response:
 ```
 
 **POST /api/auth/login**
+
 ```json
 {
   "email": "john@example.com",
   "password": "SecurePass123!"
 }
 ```
+
 Response:
+
 ```json
 {
   "message": "Login successful",
@@ -91,8 +144,9 @@ Response:
 ### User Endpoints
 
 **GET /api/user/:userId**  
-*Get user profile*  
+_Get user profile_  
 Response:
+
 ```json
 {
   "message": "Profile fetched successfully",
@@ -109,8 +163,9 @@ Response:
 ```
 
 **GET /api/user**  
-*Get all users*  
+_Get all users_  
 Response:
+
 ```json
 {
    "message": "Users fetched successfully",
@@ -125,20 +180,23 @@ Response:
 ```
 
 **PUT /api/user/profile**  
-*Update user profile*  
+_Update user profile_  
 Request Body:
+
 ```json
 {
-   "message": "Profile updated successfully",
-   "data": {
-     "name": "John Doe",
-     "availability": { "start": "09:00", "end": "17:00" },
-     "bio": "bio",
-     "mobileNumber": 1234567890
-   }
+  "message": "Profile updated successfully",
+  "data": {
+    "name": "John Doe",
+    "availability": { "start": "09:00", "end": "17:00" },
+    "bio": "bio",
+    "mobileNumber": 1234567890
+  }
 }
 ```
+
 Response:
+
 ```json
 {
   "message": "Profile updated successfully",
@@ -154,8 +212,9 @@ Response:
 ### Notification Endpoints
 
 **POST /api/notification**  
-*Send notification*  
+_Send notification_  
 Request Body:
+
 ```json
 {
   "recipients": ["65c3a8b1f1a2d4e5f6g7h8i", "65jhf8b1f1a2d4e5f6g7h8i"],
@@ -163,7 +222,9 @@ Request Body:
   "isCritical": true
 }
 ```
+
 Response:
+
 ```json
 {
   "message": "Notification sent successfully",
@@ -178,8 +239,9 @@ Response:
 ```
 
 **GET /api/notification/recipient**  
-*Get recipient notifications*  
+_Get recipient notifications_  
 Response:
+
 ```json
 {
    "message": "Notifications fetched successfully",
@@ -197,8 +259,9 @@ Response:
 ```
 
 **GET /api/notification/sent**  
-*Get sent notifications*  
+_Get sent notifications_  
 Response:
+
 ```json
 {
    "message": "Notifications fetched successfully",
@@ -218,15 +281,18 @@ Response:
 ## Frontend Components
 
 1. **Authentication**
+
    - Login/Signup pages with form validation
    - JWT token handling
 
 2. **Dashboard**
+
    - User/Admin overview
    - Quick access to create notifications
    - User cards with profile links
 
 3. **Profile Management**
+
    - Edit personal information
    - Set availability time slots
    - Admin badge display
@@ -239,6 +305,7 @@ Response:
 ## Environment Variables
 
 `.env` Example:
+
 ```ini
 JWT_SECRET=your_jwt_secret
 MONGODB_URI=mongodb://localhost:27017/user-management

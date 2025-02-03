@@ -37,19 +37,19 @@ exports.updateUser = async (req, res) => {
         return res.status(400).json({ message: "Invalid User ID" });
     }
 
-    if (!name && !mobileNumber && (!bio || bio === '') && !availability) {
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (mobileNumber) updateData.mobileNumber = mobileNumber;
+    if (bio || bio === '') updateData.bio = bio;
+    if (availability) updateData.availability = availability;
+
+    if (Object.keys(updateData).length === 0) {
         return res.status(400).json({ message: "At least one field is required" });
     }
 
     if (availability && (!availability.start || !availability.end)) {
         return res.status(400).json({ message: "Both start and end of availability are required" });
     }
-
-    const updateData = {};
-    if (name) updateData.name = name;
-    if (mobileNumber) updateData.mobileNumber = mobileNumber;
-    if (bio || bio === '') updateData.bio = bio;
-    if (availability) updateData.availability = availability;
 
     try {
         const user = await User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true }).select("-password");
