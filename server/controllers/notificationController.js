@@ -1,23 +1,7 @@
 const User = require("../models/User.model");
 const { Notification, STATUS_TYPES } = require("../models/Notification.model");
 const mongoose = require("mongoose");
-
-const isAvailable = async (user) => {
-    const currentTime = new Date();
-    const currentTimeInMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
-
-    const [startHours, startMinutes] = user.availability.start.split(":").map(Number);
-    const [endHours, endMinutes] = user.availability.end.split(":").map(Number);
-
-    const startTimeInMinutes = startHours * 60 + startMinutes;
-    let endTimeInMinutes = endHours * 60 + endMinutes;
-
-    if (endTimeInMinutes === 0) endTimeInMinutes = 24 * 60;
-
-    if (startTimeInMinutes <= endTimeInMinutes) {
-        return currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes < endTimeInMinutes;
-    }
-};
+const isAvailable = require("../cronJobs");
 
 exports.sendNotification = async (req, res) => {
     const { recipients, message, isCritical } = req.body;

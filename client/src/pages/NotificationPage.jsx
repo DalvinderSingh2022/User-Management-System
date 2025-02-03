@@ -91,7 +91,7 @@ const NotificationsPage = () => {
               </div>
             ))
           ) : notifications[activeTab]?.length !== 0 ? (
-            "loading..."
+            <LoadingSpinner />
           ) : (
             <div className="p-8 text-center text-gray-500">
               No {activeTab} notifications found

@@ -24,7 +24,7 @@ export const UserProvider = ({ children }) => {
 
     try {
       const res = await updateUserProfile(profileData);
-      setUser(res.data.data);
+      return res.data.data;
     } catch (error) {
       setError(error.response?.data?.message || "Profile updation failed");
     } finally {

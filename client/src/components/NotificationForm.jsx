@@ -26,9 +26,7 @@ const NotificationForm = ({ close, initialRecipients = [] }) => {
     close();
   };
 
-  if (!Array.isArray(users) || !user) {
-    return <div>loading...</div>;
-  }
+  if (!Array.isArray(users) || !user) return <LoadingSpinner />;
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
@@ -82,7 +80,7 @@ const NotificationForm = ({ close, initialRecipients = [] }) => {
             Select Recipients
           </label>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {users?.lenght > 0 ? (
+            {users.filter((u) => u._id !== user._id)?.length > 0 ? (
               users
                 .filter((u) => u._id !== user._id)
                 .map((user) => (
@@ -108,7 +106,7 @@ const NotificationForm = ({ close, initialRecipients = [] }) => {
                     </div>
                   </label>
                 ))
-            ) : users?.length !== 1 ? (
+            ) : users.filter((u) => u._id !== user._id)?.length !== 0 ? (
               <LoadingSpinner />
             ) : (
               "No User Yet (Other than you)"

@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await authLogin(email, password);
       localStorage.setItem("token", res.data.data.token);
-      await fetchUserData();
+      await fetchUserData(res.data.data.userId);
 
       return res.data.data.isAdmin;
     } catch (error) {

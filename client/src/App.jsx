@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext.jsx";
+import LoadingSpinner from "./components/LaodingSpinner.jsx";
 
 const Login = lazy(() => import("./pages/Login.jsx"));
 const Register = lazy(() => import("./pages/Register.jsx"));
@@ -13,7 +14,13 @@ const App = () => {
   const { user } = useAuth();
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="h-screen w-screen grid place-items-center">
+          <LoadingSpinner />
+        </div>
+      }
+    >
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

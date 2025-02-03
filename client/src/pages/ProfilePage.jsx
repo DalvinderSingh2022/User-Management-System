@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { useUser } from "../context/UserContext";
 import { useParams } from "react-router-dom";
+import LoadingSpinner from "../components/LaodingSpinner";
 
 const ProfilePage = () => {
   const { user, updateProfile, loading, getProfile } = useUser();
@@ -58,13 +59,12 @@ const ProfilePage = () => {
       return acc;
     }, {});
 
-    await updateProfile(updateData);
+    const updatedData = await updateProfile(updateData);
+    setFormData(updatedData);
     setIsEditing(false);
   };
 
-  if (!formData) {
-    return <div>loading...</div>;
-  }
+  if (!formData) return <LoadingSpinner />;
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
