@@ -16,7 +16,7 @@ export const UserProvider = ({ children }) => {
   const [users, setUsers] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const { user, setUser } = useAuth();
+  const { user } = useAuth();
 
   const updateProfile = useCallback(async (profileData) => {
     setError("");

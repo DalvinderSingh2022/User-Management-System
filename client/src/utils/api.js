@@ -1,4 +1,5 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -16,6 +17,20 @@ api.interceptors.request.use((config) => {
     }
     return config;
 });
+
+api.interceptors.response.use(
+    response => {
+        if (response.data?.message) {
+            toast.success(response.data.message);
+        }
+        return response;
+    },
+    error => {
+        toast.error(error.response?.data?.message || error.message || 'Something went wrong')
+
+        return Promise.reject(error);
+    }
+);
 
 // Auth endpoints
 export const authLogin = (email, password) => api.post("/auth/login", { email, password });

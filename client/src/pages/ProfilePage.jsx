@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LaodingSpinner";
 
 const ProfilePage = () => {
-  const { user, updateProfile, loading, error, getProfile } = useUser();
+  const { user, updateProfile, loading, getProfile } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(null);
   const { userId } = useParams();
@@ -60,10 +60,8 @@ const ProfilePage = () => {
     }, {});
 
     const updatedData = await updateProfile(updateData);
-    if (!error) {
-      setFormData((prev) => updatedData || prev);
-      setIsEditing(false);
-    }
+    setFormData((prev) => updatedData || prev);
+    setIsEditing(false);
   };
 
   return (
